@@ -57,10 +57,15 @@ MA_API ma_device_config *sf_allocate_device_config(const ma_device_type deviceTy
     config->playback.channels = channels;
     config->capture.format = format;
     config->capture.channels = channels;
+    config->capture.shareMode  = ma_share_mode_shared;
 
     // Set device IDs
     config->playback.pDeviceID = playbackDeviceId;
     config->capture.pDeviceID = captureDeviceId;
+
+    // Optimize for low latency
+    config->performanceProfile = ma_performance_profile_low_latency;
+    config->wasapi.noAutoConvertSRC = true;
 
     return config;
 }
@@ -198,28 +203,4 @@ ma_result sf_get_devices(ma_context *context, sf_device_info **ppPlaybackDeviceI
 
     return result;
 }
-
-
-/*
-MA_API ma_result sf_get_devices(ma_context *context, ma_device_info **ppPlaybackDeviceInfos,
-                                const ma_device_info **ppCaptureDeviceInfos, ma_uint32 *pPlaybackDeviceCount,
-                                ma_uint32 *pCaptureDeviceCount) {
-    ma_device_info *pPlaybackDevices = nullptr;
-    ma_device_info *pCaptureDevices = nullptr;
-
-    const auto result = ma_context_get_devices(context,
-                                               &pPlaybackDevices,
-                                               pPlaybackDeviceCount,
-                                               &pCaptureDevices,
-                                               pCaptureDeviceCount);
-
-    if (result == MA_SUCCESS) {
-        *ppPlaybackDeviceInfos = pPlaybackDevices;
-        *ppCaptureDeviceInfos = pCaptureDevices;
-    }
-
-    return result;
-}
-
-*/
 } // End of extern "C" block

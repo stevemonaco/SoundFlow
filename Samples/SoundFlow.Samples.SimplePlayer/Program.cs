@@ -19,7 +19,7 @@ internal static class Program
 {
     private static AudioEngine? _audioEngine;
     private static readonly string RecordedFilePath = Path.Combine(Directory.GetCurrentDirectory(), "recorded.wav");
-    
+
     private static void Main()
     {
         SetOrCreateEngine();

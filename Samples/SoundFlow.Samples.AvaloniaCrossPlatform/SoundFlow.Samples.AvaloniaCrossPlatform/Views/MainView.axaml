@@ -1,0 +1,38 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:SoundFlow.Samples.AvaloniaCrossPlatform.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SoundFlow.Samples.AvaloniaCrossPlatform.Views.MainView"
+             x:DataType="vm:MainViewModel">
+  <Design.DataContext>
+    <!-- This only sets the DataContext for the previewer in an IDE,
+         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+    <vm:MainViewModel />
+  </Design.DataContext>
+
+  <Grid RowDefinitions="Auto, *, Auto, Auto, Auto" ColumnDefinitions="Auto, *, Auto">
+        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="SoundFlow Music Player" FontSize="24" Margin="10" HorizontalAlignment="Center"/>
+
+        <ListBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" ItemsSource="{Binding Tracks}" SelectedItem="{Binding CurrentTrack}"
+                 DisplayMemberBinding="{Binding Title}" Margin="10" MaxHeight="200"/>
+
+        <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Margin="10" HorizontalAlignment="Center" Grid.ColumnSpan="3">
+            <Button Command="{Binding OpenFolderCommand}" Content="Open Folder" Margin="5"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal" Margin="10" HorizontalAlignment="Center" Grid.ColumnSpan="3">
+            <Button Command="{Binding PreviousTrackCommand}" Content="Previous" Margin="5"/>
+            <Button Command="{Binding PlayCommand}" Content="Play" Margin="5"/>
+            <Button Command="{Binding PauseCommand}" Content="Pause" Margin="5"/>
+            <Button Command="{Binding StopCommand}" Content="Stop" Margin="5"/>
+            <Button Command="{Binding NextTrackCommand}" Content="Next" Margin="5"/>
+            <ToggleSwitch Command="{Binding ToggleLoopCommand}" OnContent="Loop" OffContent="Single" Margin="5"/>
+        </StackPanel>
+
+        <Slider Grid.Row="4" Grid.Column="0" Minimum="0" Maximum="1" Value="{Binding Volume, Mode=TwoWay}" Margin="10" VerticalAlignment="Center"/>
+        <Slider Grid.Row="4" Grid.Column="1" Minimum="0" Maximum="1" Value="{Binding PlaybackProgress, Mode=OneWay}" Margin="10" IsEnabled="{Binding CurrentTrack}" Name="PlaybackProgress" />
+        <TextBlock Grid.Row="4" Grid.Column="2" Text="{Binding CurrentTrack.Title, FallbackValue='No Track Selected'}" Margin="10" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+    </Grid>
+</UserControl>

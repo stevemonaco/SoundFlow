@@ -1,6 +1,6 @@
 ﻿namespace SoundFlow.Backends.MiniAudio.Enums;
 
-internal enum SeekPoint
+public enum SeekPoint
 {
     /// <summary>
     ///     Seek from the beginning of the stream.

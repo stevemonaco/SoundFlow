@@ -1,4 +1,5 @@
-﻿using SoundFlow.Abstracts;
+﻿using System.Runtime.InteropServices;
+using SoundFlow.Abstracts;
 using SoundFlow.Enums;
 using SoundFlow.Exceptions;
 using SoundFlow.Interfaces;
@@ -27,12 +28,12 @@ internal sealed unsafe class MiniAudioEncoder : ISoundEncoder
         FilePath = filePath;
 
         // Construct encoder config
-        var config = Native.AllocateEncoderConfig(encodingFormat, sampleFormat, (uint)channels, (uint)sampleRate);
+        var config = Native.AllocateEncoderConfig((int)encodingFormat, (int)sampleFormat, channels, sampleRate);
 
         // Allocate encoder and initialize
         _encoder = Native.AllocateEncoder();
-        var result = Native.EncoderInitFile(filePath, config, _encoder);
-        if (result != Result.Success)
+        var result = (Result)Native.EncoderInitFile(filePath, config, _encoder);
+        if (result !=  Result.Success)
             throw new BackendException("MiniAudio", result, "Unable to initialize encoder.");
     }
 
@@ -47,16 +48,16 @@ internal sealed unsafe class MiniAudioEncoder : ISoundEncoder
     public int Encode(Span<float> samples)
     {
         var framesToWrite = (ulong)(samples.Length / AudioEngine.Channels);
-        ulong framesWritten = 0;
+        var framesWritten = nint.Zero;
 
         fixed (float* pSamples = samples)
         {
-            var result = Native.EncoderWritePcmFrames(_encoder, (nint)pSamples, framesToWrite, &framesWritten);
+            var result = (Result)Native.EncoderWritePcmFrames(_encoder, (nint)pSamples, (int)framesToWrite, framesWritten);
             if (result != Result.Success)
                 throw new BackendException("MiniAudio", result, "Failed to write PCM frames to encoder.");
         }
 
-        return (int)framesWritten * AudioEngine.Channels;
+        return (int)(Marshal.ReadInt64(framesWritten) * AudioEngine.Channels);
     }
 
     public void Dispose()

@@ -360,6 +360,13 @@ public abstract class AudioEngine : IDisposable
     public abstract void SwitchDevice(DeviceInfo deviceInfo, DeviceType type = DeviceType.Playback);
 
     /// <summary>
+    /// Switches the audio engine to the given playback and/or capture devices.
+    /// </summary>
+    /// <param name="playbackDeviceInfo">The playback device to switch to. <c>null</c> to keep the current playback device.</param>
+    /// <param name="captureDeviceInfo">The capture device to switch to. <c>null</c> to keep the current capture device.</param>
+    public abstract void SwitchDevices(DeviceInfo? playbackDeviceInfo, DeviceInfo? captureDeviceInfo);
+
+    /// <summary>
     ///     Retrieves the list of available playback and capture devices from the underlying audio backend.
     /// </summary>
     /// <remarks>

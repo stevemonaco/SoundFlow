@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.29)
+cmake_minimum_required(VERSION 3.26)
 project(miniaudio)
 
 set(CMAKE_CXX_STANDARD 26)
@@ -82,8 +82,11 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL "iOS")
         XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED "NO"
     )
 
-elseif (CMAKE_SYSTEM_NAME STREQUAL "Android")
-    # AAudio should work out of the box, but if OpenSL|ES is needed:
-    add_definitions(-DMA_NO_RUNTIME_LINKING)
-    target_link_libraries(miniaudio OpenSLES)
+elseif (CMAKE_SYSTEM_NAME STREQUAL "Emscripten")
+    # Set output name and type for Emscripten
+    set_target_properties(miniaudio PROPERTIES
+        OUTPUT_NAME "libminiaudio" # Base name for output files (libminiaudio.wasm, libminiaudio.js)
+        SUFFIX ".js"             # Emscripten will generate .js and .wasm
+        LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" # Output directory for .js and .wasm
+    )
 endif()

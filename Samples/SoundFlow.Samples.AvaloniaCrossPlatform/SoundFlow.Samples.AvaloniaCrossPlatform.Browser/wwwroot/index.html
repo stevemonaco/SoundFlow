@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>SoundFlow.Samples.AvaloniaCrossPlatform.Browser</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="/" />
+    <link rel="modulepreload" href="./main.js" />
+    <link rel="modulepreload" href="./_framework/dotnet.js" />
+    <link rel="modulepreload" href="./_framework/avalonia.js" />
+    <link rel="stylesheet" href="./app.css" />
+</head>
+
+<body style="margin: 0px; overflow: hidden">
+    <div id="out">
+        <div id="avalonia-splash">
+            <div class="center">
+                <h2 class="purple">
+                    Powered by
+                    <a class="highlight" href="https://www.avaloniaui.net/" target="_blank">Avalonia UI</a>
+                </h2>
+            </div>
+            <img class="icon" src="Logo.svg" alt="Avalonia Logo" />
+        </div>
+    </div>
+    
+    <!-- Load Miniaudio Glue Code FIRST -->
+    <script src="libminiaudio.js"></script>
+    <script type='module' src="./main.js"></script>
+
+    <!-- Initialize Miniaudio Module (needs to happen after libminiaudio.js loads but before .NET tries to use it) -->
+    <script>
+        window.miniaudioPromise = Module();
+        window.miniaudioPromise.then(m => {
+            console.log("Miniaudio WASM Module Initialized");
+            window.miniaudioModule = m; // Store the resolved module globally
+            // Print out Miniaudio object to check if null
+            console.log(`Miniaudio Version: ${window.miniaudioModule}`);
+        }).catch(e => {
+            console.error("Miniaudio WASM Module Failed to Initialize:", e);
+        });
+    </script>
+</body>
+
+</html>

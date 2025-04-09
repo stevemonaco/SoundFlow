@@ -26,9 +26,9 @@ public class MicrophoneDataProvider : ISoundDataProvider, IDisposable
     public MicrophoneDataProvider(int bufferSize = 8, int? sampleRate = null)
     {
         _audioEngine = AudioEngine.Instance;
-        if (_audioEngine.Capability != Capability.Record && _audioEngine.Capability != Capability.Mixed)
+        if (_audioEngine.Capability == Capability.Playback)
             throw new InvalidOperationException(
-                "AudioEngine must be initialized with Capability.Record or Capability.Mixed to use MicrophoneDataProvider.");
+                "AudioEngine must be initialized with Capability.Record or Capability.Mixed or Capability.Loopback to use MicrophoneDataProvider.");
         _bufferSize = bufferSize;
         SampleRate = sampleRate ?? _audioEngine.SampleRate;
         AudioEngine.OnAudioProcessed += EnqueueAudioData;

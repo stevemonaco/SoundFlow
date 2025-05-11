@@ -140,9 +140,9 @@ public sealed class MiniAudioEngine(
         PlaybackDeviceCount = (int)playbackDeviceCount;
         CaptureDeviceCount = (int)captureDeviceCount;
         
-        if (pPlaybackDevices == nint.Zero || pCaptureDevices == nint.Zero || playbackDeviceCount == 0 ||
-            captureDeviceCount == 0)
-            throw new InvalidOperationException("Unable to get devices.");
+        //if (pPlaybackDevices == nint.Zero || pCaptureDevices == nint.Zero || playbackDeviceCount == 0 ||
+        //    captureDeviceCount == 0)
+        //    throw new InvalidOperationException("Unable to get devices.");
 
         PlaybackDevices = pPlaybackDevices.ReadArray<DeviceInfo>(PlaybackDeviceCount);
         CaptureDevices = pCaptureDevices.ReadArray<DeviceInfo>(CaptureDeviceCount);

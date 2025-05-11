@@ -22,9 +22,7 @@
 
     <ItemGroup>
         <Content Include="Backends\MiniAudio\runtimes\**\*.*">
-            <Link>runtimes\%(RecursiveDir)%(Filename)%(Extension)</Link>
             <PackagePath>runtimes</PackagePath>
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <Pack>true</Pack>
         </Content>
     </ItemGroup>

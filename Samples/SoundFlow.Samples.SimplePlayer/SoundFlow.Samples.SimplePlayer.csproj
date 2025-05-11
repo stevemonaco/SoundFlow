@@ -1,14 +1,48 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <OutputType>Exe</OutputType>
-        <TargetFramework>net8.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-    </PropertyGroup>
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Src\SoundFlow.csproj" />
+  </ItemGroup>
+  
+  <!-- Only necessary for local sample projects which reference SoundFlow by ProjectReference -->
+
+  <PropertyGroup>
+    <MSBuildCopyOutputSwitch>-v:diag</MSBuildCopyOutputSwitch>
+  </PropertyGroup>
+
+  <Target Name="CopyRuntimeFiles" AfterTargets="Build">
+    <Message Text="[BUILD] Trying to copy runtime files from $(SolutionDir) to output directory $(OutDir)" Importance="high" />
+    <Message Text="[BUILD] Copying runtime files to build output directory $(OutDir)" Importance="high" />
     <ItemGroup>
-      <ProjectReference Include="..\..\Src\SoundFlow.csproj" />
+      <RuntimeFiles Include="$(SolutionDir)/Src/Backends/MiniAudio/runtimes/**/*.*" />
     </ItemGroup>
 
+    <Copy
+      SourceFiles="@(RuntimeFiles)"
+      DestinationFiles="@(RuntimeFiles->'$(OutDir)/runtimes/%(RecursiveDir)%(Filename)%(Extension)')" />
+
+    <Message Text="Copied runtime files to output directory" Importance="high" />
+  </Target>
+
+  <Target Name="CopyRuntimeFilesOnPublish" AfterTargets="ComputeResolvedFilesToPublishList" BeforeTargets="_CreateSingleFileBundle">
+    <ItemGroup>
+      <RuntimeFiles Include="$(MSBuildProjectDirectory)/../../Src/Backends/MiniAudio/runtimes/**/*.*" />
+    </ItemGroup>
+    
+    <Message Text="[PUBLISH] PublishDir = $(PublishDir)" Importance="high" />
+    <Message Text="[PUBLISH] RuntimeFiles Path = $(MSBuildProjectDirectory)../../Src/Backends/MiniAudio/runtimes/**/*.*" Importance="high" />
+
+    <Copy
+      SourceFiles="@(RuntimeFiles)"
+      DestinationFiles="@(RuntimeFiles->'$(PublishDir)/runtimes/%(RecursiveDir)%(Filename)%(Extension)')" />
+
+    <Message Text="PUBLISH: Copied runtime files to publish directory: $(PublishDir)" Importance="high" />
+  </Target>
 </Project>

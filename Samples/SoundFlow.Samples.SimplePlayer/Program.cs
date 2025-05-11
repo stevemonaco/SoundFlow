@@ -1,4 +1,6 @@
 ﻿using System.Numerics;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using SoundFlow.Abstracts;
 using SoundFlow.Backends.MiniAudio;
 using SoundFlow.Components;
@@ -22,6 +24,10 @@ internal static class Program
     
     private static void Main()
     {
+        // Only necessary for local sample projects which reference SoundFlow by ProjectReference
+        // Not required for external applications which reference SoundFlow by PackageReference
+        NativeLibrary.SetDllImportResolver(Assembly.GetAssembly(typeof(AudioEngine))!, NativeLibraryResolver.Resolve);
+
         SetOrCreateEngine();
 
         while (true)
